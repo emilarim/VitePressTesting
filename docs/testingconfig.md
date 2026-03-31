@@ -67,7 +67,7 @@ In previous tests with another documentation generator (*Docusaurus*), this comm
 
 ![Vulnerabilities](/images/Vulnerabilities.png)
 
-#### Completing installation
+#### Completing Installation
 
 ::: warning
 After completing the installation of the *vitepress-plugin-mermaid*, another moderate-severity vulnerability appears, bringing the total to four.
@@ -109,7 +109,7 @@ The `vitepress-plugin-mermaid` is a lightweight, static plugin that provides bas
       B -->|Yes| C[Celebrate]
       B -->|No| D[Debug]
       D --> B
-    ```
+  ```
 ```
 ![SimpleFlowChart](/images/SimpleFlowChart.png)
 
@@ -156,7 +156,7 @@ In order to test diagrams with interactive visualizations supporting features su
 Keeping both plugins installed caused runtime conflicts, resulting in diagrams not rendering correctly after navigation.
 :::
 
-#### Installation considerations
+#### Installation Considerations
 
 1. Run the renderer plugin `npm install vitepress-mermaid-renderer mermaid -D`. 
 2. Configure the `.vitepress/config.mts`:
@@ -315,57 +315,439 @@ According to the following figure, *'Installation Considerations'* appears first
 
 To reorder pages within a section, it is necessary to rearrange each object inside the `items` array. To reorder entire sections, the corresponding block (from text: ' ', items:[] ) must be moved up or down within the `sidebar` array.
 
+For more details see [1](https://vitepress.dev/reference/default-theme-sidebar).
+
 ## Link Configurations
 
-- How can link from one documentation page to another? (relative paths, special syntax, auto-resolution by title?)
+VitePress provides very flexible ways to link between documentation pages:
 
-VitePress is very flexible linking between documentation pages in several ways.
+### 1. Using Relative Paths 
 
-- Using relative paths: [Installation Section](installationVitePress)
+Example: [Installation Section](installationVitePress)
 
-        ```md
-        [Installation Section](installationVitePress)
-        ```
-  > It is not necessary to include the `.md` extension, as VitePress resolves it automatically.
+    ```md
+      [Installation Section](installationVitePress)
+    ```
+  > It is not necessary to include the `md` extension, as VitePress resolves it automatically.
 
-- Jumping between sections within the same document using an anchor: [Link Configurations](#link-configurations)
+### 2. Jumping Between Sections Within the Same Document Using an Anchor
 
-        ```md
-        [Link Configurations](#link-configurations)
-        ```
+Example: [Link Configurations](#link-configurations)
+
+    ```md
+      [Link Configurations](#link-configurations)
+    ```
   > VitePress automatically generates IDs from the headings.
 
-- Using standard Markdown syntax for external links: [GitHub](https://github.com/emilarim/VitePressTesting).
+### 3. Using Standard Markdown Syntax for External Links
 
-      ```md
+Example: [GitHub](https://github.com/emilarim/VitePressTesting).
+
+    ```md
       [GitHub](https://github.com/emilarim/VitePressTesting)
-      ```
-- Auto-Resolution by Title is possible using reference-style links in Markdown:
+    ```
+### 4. Auto-Resolution by Title Using Reference-Style Links
 
-  1. Define a reference associated with a page (e.g.,*hello-docs*):
+It is possible to define references associated with a page and reuse them throughout the document.
+
+  1. Define a reference in the Markdown content (e.g.,*hello-docs*):
 
     ```md
-    Select [hello-docs][VitePressHome] to start
+      Select [hello-docs][VitePressHome] to start
     ```
 
-  2. Declare the reference with the target path and optional title:
+  2. Declare the reference with its target path and optional title:
 
     ```md
-    [VitePressHome]: /index.md "UX Evaluation Criteria"
+      [VitePressHome]: /index.md "UX Evaluation Criteria"
     ```
   
-  Example usage:
+  **Example Usage:**
   
-  To start UX Evaluation Criteria select [hello-docs][VitePressHome].
+  To start UX Evaluation Criteria, select [hello-docs][VitePressHome].
 
   <!-- Later in the document -->
   [VitePressHome]: /index.md "UX Evaluation Criteria"
 
+  > References can be decalred once and reused multiple times in the document.
 
+## Page Composition (Content)
+
+In VitePress, each Markdown file is compiled into HTML and then processed as a *Vue Single-File Component*. This allows the user to use any Vue features directly inside Markdown and compose a single rendered page using dynamic templating, Vue components, or custom in-page Vue logic by adding a `<script> tag` 
+[6](https://vitepress.dev/guide/using-vue).
+
+For example, once a Vue component is defined in terms of structure and style locally or globally, it can be reused throughout multiple pages in the project.
+
+### **Creating *Warning Boxes* as a Vue Component**
+  1. Create the components folder inside the project:
+
+    ```bash
+    docs/.vitepress/theme/components/
+    ```
+  2. Create a Vue component file:
+
+    ```bash
+    docs/.vitepress/theme/components/WarningBox.vue
+    ```
+  3. Example component:
+
+    ```bash
+    <template>
+      <div class="warning">
+        ⚠️ <slot />
+      </div>
+    </template>
+
+    <style scoped>
+    .warning {
+      padding: 10px;
+      border-left: 4px solid orange;
+      background: #fff8e1;
+    }
+    </style>
+    ```
+  4. Register the component in `docs/.vitepress/theme/index.ts`:
+
+    ```bash
+    import DefaultTheme from 'vitepress/theme'
+    import WarningBox from './components/WarningBox.vue'
+
+    export default {
+      ...DefaultTheme,
+      enhanceApp({ app }) {
+        app.component('WarningBox', WarningBox)
+      }
+    }
+    ```
+
+  5. Use the component in any markdown (`.md`) file:
+
+  ```bash
+    <WarningBox>
+    This is a reusable warning!
+    </WarningBox>
+  ```
+    <WarningBox>
+    This is a reusable warning!
+    </WarningBox>
+
+### **Creating *notebox* as Reusable Snippets**
+
+  1. Create a Vue component file in the components folder:
+
+    ```bash
+    docs/.vitepress/theme/components/NoteBox.vue
+    ```
+  2. Example component:
+
+    ```bash
+    <template>
+      <div class="note">
+        <strong>{{ title }}</strong>
+        <p><slot /></p>
+      </div>
+    </template>
+
+    <script setup>
+    defineProps({
+      title: {
+        type: String,
+        default: 'Note'
+      }
+    })
+    </script>
+    ```
+  3. Register the component in `docs/.vitepress/theme/index.ts`:
+
+    ```bash
+    import DefaultTheme from 'vitepress/theme'
+    import NoteBox from './components/NoteBox.vue'
+
+    export default {
+      ...DefaultTheme,
+      enhanceApp({ app }) {
+        app.component('NoteBox', NoteBox)
+      }
+    }
+    ```
+  4. Use the component in any Markdown (`.md`) file:
+
+    ```bash
+      <NoteBox title="Warning">
+      THIS IS A NOTEBOX SNIPPET!
+      </NoteBox>
+    ```
+    <NoteBox title="Warning">
+    THIS IS A NOTEBOX SNIPPET!
+    </NoteBox>
+
+For additional components that are **not natively** supported, it is possible to use extra plugins to extend functionality. For example, plugins for interactive charts, advanced diagrams, or custom UI elements.
+
+### **Including Markdown Files**
+
+VitePress allows including Markdown files inside other pages, enabling reusable snippets.
+
+  1. Create a `snippets` folder and a Markdown file (`common-errors.md`) inside the project:
+
+    ```bash
+    docs/.vitepress/snippets/common-errors.md
+    ```
+    Example content:
+
+    ```md
+    | Error | Solution |
+    |-------|----------|
+    | `command not found` | Ensure Node.js is in your PATH | `permission 
+    | denied` | Try running with `sudo` or fix permissions |
+    ```
+
+  2. Install the `market` library to parse Markdown content:
+
+    ```bash
+    npm install marked --save-dev
+    ```
+  3. Create a custom `IncludeMarkdown` component:
+
+    ```bash
+    docs/.vitepress/theme/components/IncludeMarkdown.vue
+    ```
+    Example component:
+
+    ```md
+      <template>
+        <div class="included-markdown" v-html="renderedContent"></div> </template>
+
+      <script setup>
+      import { ref, onMounted } from 'vue'
+      import { marked } from 'marked'
+
+      const props = defineProps({
+        src: {
+          type: String,
+          required: true
+        }
+      })
+
+      const renderedContent = ref('')
+
+      onMounted(async () => {
+        try {
+          const response = await fetch(props.src)
+          const markdown = await response.text()
+          renderedContent.value = marked.parse(markdown)
+        } catch (error) {
+          console.error(`Failed to load ${props.src}:`, error)
+          renderedContent.value = `<div class="error">Failed to load content: 
+      ${props.src}</div>`
+        }
+      })
+      </script>
+    ```
+  4. Register the component in `docs/.vitepress/theme/index.ts`:
+
+    ```bash
+    import DefaultTheme from 'vitepress/theme'
+    import WarningBox from './components/IncludeMarkdown.vue'
+
+    export default {
+      ...DefaultTheme,
+      enhanceApp({ app }) {
+        app.component('IncludeMarkdown', IncludeMarkdown)
+      }
+    }
+    ```
+
+  5. Use the component `common-errors.md` in any Markdown (`.md`) file:
+
+    ```bash
+      <IncludeMarkdown src="/.vitepress/snippets/common-errors.md" />
+    ```
+
+  <IncludeMarkdown src="/.vitepress/snippets/common-errors.md" />
+
+
+  :::tip
+  If a component is only used by a few pages, it is recommended to import it explicity where it is used. This allows proper code-splitting and loads the component only on relevant pages.
+  :::
+
+### **Vue Components**
+
+VitePress supports Vue components inside Markdown, enabling a similar concept to **MDX** *(Markdown with JSX (JavaScript XML) in React).
+
+
+| Feature | MDX (React) | VitePress (Vue)         |
+| ------- | ----------- | ----------------------- |
+| Syntax  | JSX         | Vue template            |
+| Props   | `{}`        | `""`                    |
+| Events  | `onClick`   | `@click`                |
+| Logic   | inline JS   | inside `<script setup>` |
+
+Appying basic examples provided by owner [7](https://vitepress.dev/guide/using-vue):
+
+  #### 1. Script & Style
+
+  ```bash
+    ---
+    Not using `<template> tag`
+    ---
+
+    <script setup>
+    import { ref } from 'vue'
+
+    const count = ref(0)
+    </script>
+
+    ##### Markdown Content
+
+    The count is: {{ count }}
+
+    <button :class="$style.button" @click="count++">Increment</button>
+
+    <style module>
+    .button {
+      color: red;
+      font-weight: bold;
+    }
+    </style>
+
+  ```
+  ![Script](/images/Script.png)
+
+#### 2. Enabling Vue Interpolation Inside Fences
+
+Use Vue-style interpolation in code fences with the `-vue` suffix, e.g. `js-vue`:
+  
+  ```bash
+    ```js-vue
+    Hello {{ 1 + 1 }}
+    ```
+  ```
+
+  ```js-vue
+  Hello {{ 1 + 1 }}
+  ```
+
+#### 3. Importing and Using Vue Components in Markdown
+
+  1. Create a Vue Component `docs/.vitepress/theme/components/TestButton.vue`:
+
+    ```bash
+    <template>
+      <button @click="handleClick">
+        {{ label }}
+      </button>
+    </template>
+
+    <script setup>
+    // ✅ props (data passed from Markdown)
+    const props = defineProps({
+      label: {
+        type: String,
+        default: 'Click me'
+      }
+    })
+
+    // ✅ event handler
+    const handleClick = () => {
+      alert(`You clicked: ${props.label}`)
+    }
+    </script>
+
+    <style scoped>
+    button {
+      padding: 8px 12px;
+      background: #646cff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    </style>
+    ```
+  2. Register the component in `docs/.vitepress/theme/index.ts`
+
+    ```bash
+    import DefaultTheme from 'vitepress/theme'
+    import TestButtonButton from './components/TestButton.vue'
+
+    export default {
+      ...DefaultTheme,
+      enhanceApp({ app }) {
+        app.component('TestButton', TestButton)
+      }
+    }
+    ```
+  3. Use it in Markdown
+
+    ```bash
+    <TestButton label="Press me" />
+
+    <TestButton label="Another button" />
+      ```
+
+<TestButton label="Press me" />
+
+<TestButton label="Another button" />
+
+
+## Content Authoring Experience
+
+VitePress supports Markdown from standard syntax to advance features with minimal setup:
+
+1. Code blocks with syntax highlighting (Java, XML, YAML, Gradle, shell) is supported out of the box using **Shiki** [8](https://shiki.style/languages):
+
+```java
+public class Hello {
+  public static void main(String[] args) {
+    System.out.println("Hello, VitePress!");
+  }
+}
+```
+
+```xml
+<note>
+  <to>User</to>
+  <message>Hello, world!</message>
+<note>
+```
+
+```yaml
+title: Hello docs
+Version: 1.0.0
+```
+
+2. Tabbed code blocks (e.g., Maven vs Gradle) are supported via built-in **code groups**:
+
+::: code-group
+
+```xml [Maven]
+<dependency>
+  <groupId>org.example</groupId>
+</dependency>
+```
+
+```gradle [Gradle]
+implementation 'org.hellodocsframework.boot:hello-docs-starter-web'
+```
+:::
+
+3. Collapsible sections, supported natively via `<details>` HTML:
+
+<details>
+<summary>Click to expand</summary>
+
+HELLO DOCS, hidden content here!
+
+</details>
+
+4. Badges or labels using built-in components:
+
+<Badge type="tip" text="beta" />
+<Badge type="warning" text="experimental" />
 
 ## Additional Difficulties Encountered
 
-- During the customization of the sidebar in the *`config.mts`* file, an issue caused by an incorrect configuration, especifically using double slashes in the link field `//installationVitePress` (syntax error), did not produce detailed error information in the *Node.js* console.
+- During sidebar customization in `config.mts`, an incorrect link (`//installationVitePress`) did not produce detailed error information in the *Node.js* console:
 
   ````md
   ```js{config.mts}
@@ -379,13 +761,54 @@ VitePress is very flexible linking between documentation pages in several ways.
     ],
   ```
   ````
-  1. The expected URL `http://localhost:5173/installationVitePress.html` was incorrectly redirected to the invalid website `http://installationVitePress`.
-  2. VitePress only reported the most recent configuration change in the *`config.mts`* file, without clearly identifying the root cause of the issue.
+  1. The expected URL `http://localhost:5173/installationVitePress.html` was incorrectly redirected to `http://installationVitePress`.
+  2. VitePress only reported the most recent configuration change in the `config.mts`, without clearly identifying the root cause of the issue.
 
     ![WrongLink](/images/WrongLink.png)
   
-    However, a separate misconfiguration involving an incorrect image path (indicating a folder structure issue) was successfully reported on the event logs:
+    A separate misconfiguration (incorrect image path) was correctly reported in the event logs:
 
     ![WrongImg](/images/WrongImg.png)
 
-- Manual customization of the Mermaid Renderer plugin tends to be error-prone and relies heavilyon console logs and external documentation for troubleshooting.
+- Manual customization of the Mermaid Renderer plugin tends to be error-prone and relies heavily on console logs and external documentation for troubleshooting.
+
+## Analyzing Security Vulnerabilities
+
+After performing the `npm audit report` command, **three moderate severity vulnerabilities** related to **esbuild** (an open-source JavaScript bundler and minifier built for speed and simplicity) [9](https://esbuild.github.io/?utm_source=chatgpt.com) were identified. These vulnerabilities allow any website to send requests to the development server and read the response.
+
+![EsbuildVulnerabilites](/images/EsbuildVulnerabilities.png)
+
+They are nested inside the dependencies of VitePress: 
+
+![esbuild](/images/esbuildNested.png)
+
+These vulnerabilities affect the behavior of the development server and are independent of the application code. The vulnerable dependency chain is as follows:
+
+```
+This project
+  → VitePress
+    → Vite
+      → esbuild (vulnerable)
+```
+### What is the risk?
+
+This is primarily a local development risk. If the development server (`npm run docs:dev`) is running while a malicious or untrusted website is open, that webside could attempt to send requests to the localhost and read the respondes.
+
+Therefore, this can be considered a development‑only risk, not an application security flaw.
+
+#### Countermeasures
+
+- Harden the development server to prevent unauthorized access, for example by allowing only specific IP addresses or networks.
+- Wait for upstream fixes from Vite and esbuild in future releases.
+- Mitigate locally by binding the development server to localhost only:
+
+  ```Javascript
+  export default {
+    vite: {
+      server: {
+        host: '127.0.0.1'
+      }
+    }
+  }
+  ```
+

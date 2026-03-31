@@ -13,7 +13,9 @@ hero:
     - theme: alt
       text: Testing Configurations
       link: /testingconfig
-
+    - theme: alt
+      text: Conclusions UX Evaluation
+      link: /UXevaluation
 ---
 
 *Welcome to my first documentation site, where I explore **Markdown** and built using **VitePress**.*

@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import Markdown from 'vite-plugin-md'
 //import vitepressMermaid from 'vitepress-plugin-mermaid'
 
 //import { MermaidPlugin } from 'vitepress-mermaid-renderer'
@@ -20,7 +21,8 @@ export default defineConfig({
           text: 'Technical Evaluation',
           items: [
             { text: 'Installation Considerations', link: '/installationVitePress' },
-            { text: 'Testing Configurations', link: '/testingconfig' }
+            { text: 'Testing Configurations', link: '/testingconfig' },
+            { text: 'Conclusions UX Evaluation', link: '/UXevaluation' },
           ]
         }
       ],
@@ -28,6 +30,11 @@ export default defineConfig({
       socialLinks: [
         { icon: 'github', link: 'https://github.com/emilarim/VitePressTesting' }
       ]
+    },
+    vite: {
+    server: {
+      host: '127.0.0.1'
+    }
     },
     //markdown: {
       //config(md) {

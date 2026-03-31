@@ -74,6 +74,7 @@
     "doc": "docs"
   },
   "devDependencies": {
+    "marked": "^17.0.5",
     "mermaid": "^11.13.0",
     "vitepress": "^1.6.4",
     "vitepress-mermaid-renderer": "^1.1.19"

@@ -1,0 +1,25 @@
+/* Enable counter for sections */
+body {
+   counter-reset: h2-counter;
+}
+
+/* Number h2 headings */
+h2 {
+   counter-reset: h3-counter;
+   counter-increment: h2-counter;
+}
+
+h2:before {
+   content: counter(h2-counter) ". ";
+   font-weight: inherit;
+}
+
+/* Number h3 headings */
+h3 {
+   counter-increment: h3-counter;
+}
+
+h3:before {
+   content: counter(h2-counter) "." counter(h3-counter) " ";
+   font-weight: inherit;
+}
