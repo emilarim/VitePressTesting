@@ -39,10 +39,13 @@ To bring the VitePress project from GitHub to your laptop and run it locally, fo
 
    Check that the folder has been created in the selected directory.
 
+   ```bash
+   cd Documents\Generators\VitePress\VitePressTesting
+   ```
+
 5. **Install dependencies**
    
-   Since the `node_modules` folder is not uploaded to GitHub (*It contains installed dependencies, not source code*). It is necessary to recreate it 
-   locally.
+   Since the `node_modules` folder is not uploaded to GitHub (*It contains installed dependencies, not source code*). It is necessary to recreate it locally.
    
    Run the following command to install all dependencies defined in `package.json` and `package-lock.json`:
 

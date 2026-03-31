@@ -2,9 +2,9 @@
 
 Although the official VitePress website provides a highly detailed installation guide ([see VitePress Getting Started](https://vitepress.dev/guide/getting-started)), the setup process itself does not require complex configuration. In fact, it involves only a few basic steps, as described in the [Installation Section](installationVitePress).
 
-VitePress' plugin architectures is based on the Vite plugin ecosystem and Vue components. Its latest *alpha* versions include breaking changes; however, as these versions are still under development, some plugins such as *vitepress-plugin-mermaid* are not yet compatible (see Section [Difficulties Encountered](./testingconfig#difficulties-encountered)).
+VitePress' plugin architectures is based on the Vite plugin ecosystem and Vue components. Its latest *alpha* versions include breaking changes; however, as these versions are still under development, some plugins such as *vitepress-plugin-mermaid* are not yet compatible (see section [Difficulties Encountered](./testingconfig#difficulties-encountered)).
 
-On the other hand, the last stable version *1.6.4* reports *four Moderate-severity* vulnerabilities. Although the overall risk may be low, it is still necessary to monitor the affected plugins, in this case the vulnerable version of `esbuild` to assess potential exposure risks (source code that could be stolen) [1](https://github.com/advisories/GHSA-67mh-4wv8-2f99).
+On the other hand, the last stable version *1.6.4* reports *four Moderate-severity* vulnerabilities. Although the overall risk may be low, it is still necessary to monitor the affected plugins, in this case the vulnerable version of `esbuild` to assess potential exposure risks (source code that could be stolen) [1](https://github.com/advisories/GHSA-67mh-4wv8-2f99), see section [Analyzing Security Vulnerabilities](./testingconfig#analyzing-security-vulnerabilities).
 
 Regarding the `npm audit report`, it suggests the available fix `npm audit fix --force`. However, this command focuses solely on remediting the vulnerabilities without considering the stabilitiy and compatibility between dependencies, which may cause cascading dependency errors and system instability ([see Downgrading to VitePress 1.6.4](./testingconfig#downgrading-to-vitepress-164)).
 

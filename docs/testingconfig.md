@@ -78,6 +78,23 @@ npm install vitepress-plugin-mermaid -D
 ```
 ![MermaidVulnerabilities](/images/MermaidVulnerabilities.png)
 
+However, after running `npm audit fix`, this particularly vulnerability was mitigated, leaving only the three moderate vulnerabilities related to the `esbuild` dependency.
+
+```bash
+npm audit fix
+```
+
+![npmAuditFix](/images/npmAuditFix.png)
+
+::: info
+The `npm audit fix` command is a tool provided by **npm** to automatically fix security vulnerabilities in the project’s dependencies. 
+
+It analyzes the package.json and package-lock.json for dependencies with known vulnerabilities, attempt to upgrade vulnerable packages to a newer, non-vulnerable version that doesn’t break the other dependencies, and
+update the package-lock.json to reflect the upgraded versions.
+:::
+
+For more details, see section [Analyzing Security Vulnerabilities ](./testingconfig#analyzing-security-vulnerabilities).
+
 - As part of completing the feature installation, it was neccesary to customize the `.vitepress/config.mts`:
   1. Import the `withMermaid` feature from the `vitepress-plugin-mermaid` plugin
   2. Call this feature within the `export default` configuration. 
@@ -243,10 +260,8 @@ Keeping both plugins installed caused runtime conflicts, resulting in diagrams n
   ```
 
 ::: info
-The number of vulnerabilities reported after upgrading the Mermaid plugin remained the same (*4 Moderate-severity*).
+The number of vulnerabilities reported after upgrading the Mermaid plugin remained the same (*3 Moderate-severity*).
 :::
-
-![MermaidRendererVulnerabilities](/images/MermaidRendererVulnerabilities.png)
 
 #### Writing Renderer Mermaid Diagrams in Markdown
 
@@ -780,7 +795,7 @@ After performing the `npm audit report` command, **three moderate severity vulne
 
 They are nested inside the dependencies of VitePress: 
 
-![esbuild](/images/esbuildNested.png)
+![esbuildNested](/images/esbuildNested.png)
 
 These vulnerabilities affect the behavior of the development server and are independent of the application code. The vulnerable dependency chain is as follows:
 
@@ -812,3 +827,45 @@ Therefore, this can be considered a development‑only risk, not an application 
   }
   ```
 
+For more details, see sections [Difficulties Encountered](./testingconfig#difficulties-encountered) and [Completing Installation](./testingconfig#completing-installation).
+
+### Taking a Closer Look at Esbuild
+
+To gain additonal insight into EsBuild, as referenced in the `npm audit report` and the advisory https://github.com/advisories/GHSA-67mh-4wv8-2f99, a proof of concept **PoC** was deployed.
+
+![esbuild](/images/Esbuild.png)
+
+- The `npm run i` command reads the dependencies defined in `package.json` and installs `esbuild`.
+
+  ![npmi](/images/npmi.png)
+
+- The `npm run watch` command runs a custom script called *watch* from `package.json`, which starts a local development web server (http://localhost:8000) and enables browser DevTools to map compiled JavaScript back to the original TypeScript source files through source maps.
+
+  ![npmWatch](/images/npmWatch.png)
+
+- By opening DevTools while the local dev server is running at `https://localhost:8000`, it is possible to send `fetch` requests to the original dev server `http://localhost:5173/, for example:
+
+  ```JavaScript
+  fetch('http://localhost:5173/installationVitePress.hmtl')
+  ```
+
+  ![npmWatch](/images/fetchhtml.png)
+
+  ```JavaScript
+  fetch('http://localhost:5173/main.js')
+  ```
+
+  ![npmWatch](/images/fetchmainjs.png)
+
+This may expose details such as *script tags*, the `assets`directory, imported URLs, URL paths, other publicly served resources.
+
+> However, the current Vitepress  development server did not contain additional configurations or exposed resources that could leak sensitive information.
+
+:::info
+Under normal circumstances, these `fetch` requests would be blocked by the **Same-Origin Policy**. However, because **esbuild** sets the following header on all responses:
+
+```http
+Access-Control-Allow-Origin: * 
+```
+Cross-origin requests from another local server were allowed, making it possible to analyze the confidentiality exposure of the current VitePress website.
+:::
