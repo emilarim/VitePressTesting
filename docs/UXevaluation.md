@@ -1,6 +1,6 @@
 # UX Evaluation Conclusions
 
-Although the official VitePress website provides a highly detailed installation guide ([see VitePress Getting Started](https://vitepress.dev/guide/getting-started)), the setup process itself does not require complex configuration. In fact, it involves only a few basic steps, as described in the [Installation Section](installationVitePress).
+Although the official VitePress website provides a basic installation guide ([see VitePress Getting Started](https://vitepress.dev/guide/getting-started)), the setup process itself does not require complex configuration. In fact, it involves only a few basic steps, as described in the [Installation Section](installationVitePress).
 
 VitePress' plugin architectures is based on the Vite plugin ecosystem and Vue components. Its latest *alpha* versions include breaking changes; however, as these versions are still under development, some plugins such as *vitepress-plugin-mermaid* are not yet compatible (see section [Difficulties Encountered](./testingconfig#difficulties-encountered)).
 
@@ -18,7 +18,7 @@ If the website is already open on a path that has been renamed, it is necessary 
 
 However, some misconfigurations may not always be recorded in the event logs, and may only be visible in the browser, as shown the section [Additional Difficulties Encountered](./testingconfig#additional-difficulties-encountered).
 
-With regard to page composition, VitePress supports building pages from multiple reusable pieces using *Vue/Vite* features. It allows reusable elemnts such as Warning boxes, noteboxes, and include markdown files within the project,  [see Page Composition Content](./testingconfig#page-composition-content).
+With regard to page composition, VitePress supports building pages from multiple reusable pieces using *Vue/Vite* features. It allows reusable elements such as Warning boxes, noteboxes, and include markdown files within the project,  [see Page Composition Content](./testingconfig#page-composition-content).
 
 If a requirement is not supported natively, VitePress also supports the creation of reusable snippets, themes (e.g.,CSS), and Vue components for interactive documentation, reusable UI elements, complex layouts, and dynamic content. Although MDX is not used in VitePress, embedding Vue components directly within Markdown also provides strong support for reusable content blocks.
 

@@ -63,7 +63,7 @@ After downgrading, the `npm audit report` shows ***3 moderate severity vulnerabi
 
 The recommended fix suggests downgrading VitePress to the very old version `0.1.1` using `npm audit fix --force`. However, this approach prioritizes *“fixing vulnerabilities”* over maintaining project stability and compatibility. 
 
-In previous tests with another documentation generator (*Docusaurus*), this command caused cascading dependency errors and system instability [4](https://github.com/emilarim/hello-docs-v2/blob/main/docs/technical-evaluation/testingconfig.md) [5](https://medium.com/@instatunnel/why-npm-audit-fix-force-is-a-terrible-idea-052ac56a3ae2).  
+In previous tests with another documentation generator (*Docusaurus*), this command caused cascading dependency errors and system instability [4](https://github.com/emilarim/hello-docs-v2/blob/main/docs/technical-evaluation/testingconfig.md), [5](https://medium.com/@instatunnel/why-npm-audit-fix-force-is-a-terrible-idea-052ac56a3ae2).  
 
 ![Vulnerabilities](/images/Vulnerabilities.png)
 
@@ -442,9 +442,10 @@ For example, once a Vue component is defined in terms of structure and style loc
     This is a reusable warning!
     </WarningBox>
   ```
-    <WarningBox>
-    This is a reusable warning!
-    </WarningBox>
+
+  <WarningBox>
+  This is a reusable warning!
+  </WarningBox>
 
 ### **Creating *notebox* as Reusable Snippets**
 
@@ -492,9 +493,9 @@ For example, once a Vue component is defined in terms of structure and style loc
       THIS IS A NOTEBOX SNIPPET!
       </NoteBox>
     ```
-    <NoteBox title="Warning">
-    THIS IS A NOTEBOX SNIPPET!
-    </NoteBox>
+<NoteBox title="Warning">
+THIS IS A NOTEBOX SNIPPET!
+</NoteBox>
 
 For additional components that are **not natively** supported, it is possible to use extra plugins to extend functionality. For example, plugins for interactive charts, advanced diagrams, or custom UI elements.
 
@@ -587,7 +588,7 @@ VitePress allows including Markdown files inside other pages, enabling reusable 
 
 ### **Vue Components**
 
-VitePress supports Vue components inside Markdown, enabling a similar concept to **MDX** *(Markdown with JSX (JavaScript XML) in React).
+VitePress supports Vue components inside Markdown, enabling a similar concept to **MDX** (Markdown with JSX (*JavaScript XML*) in React).
 
 
 | Feature | MDX (React) | VitePress (Vue)         |

@@ -170,7 +170,7 @@ To upload the VitePress project to GitHub, it is necessary to create a repositor
 
 5. **Link the local repository to GitHub**
 
-  Replace `YourUsername` and `Repo_name` with the GitHub username and and repository name.
+  Replace `YourUsername` and `Repo_name` with the GitHub username and repository name.
 
   ```bash
   git remote add origin https://github.com/YourUsername/Repo_name.git
