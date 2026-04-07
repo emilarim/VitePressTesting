@@ -1,0 +1,9 @@
+Docusaurus:
+
+- Docusaurus requires a full URL including `https://` in the `url` field:
+
+  ![IncorrectSyntax](/img/IncorrectSyntax.png)
+
+- Incorrect configuration of `url` or `baseUrl` fields:
+
+  ![WrongRepository](/img/WrongRepository.png)

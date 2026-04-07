@@ -18,7 +18,7 @@ hero:
       link: /UXevaluation
 ---
 
-*Welcome to my first documentation site, where I explore **Markdown** and built using **VitePress**.*
+*Welcome to the **VitePress** documentation site, where I explore **Markdown** and its built-in features.*
 
 This documentation describes the UX (User Experience) process used to assess the documentation generator VitePress in terms of usability, efficiency, and practicality. The evaluation is carried out through the configuration of specific content requirements for the project and analyzing its behavior with respect to the following aspects.
 
