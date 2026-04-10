@@ -14,7 +14,7 @@ hero:
       text: Testing Configurations
       link: /testingconfig
     - theme: alt
-      text: Conclusions UX Evaluation
+      text: UX Evaluation Conclusions
       link: /UXevaluation
 ---
 

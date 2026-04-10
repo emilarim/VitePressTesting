@@ -715,7 +715,7 @@ VitePress supports Markdown from standard syntax to advance features with minima
 ```java
 public class Hello {
   public static void main(String[] args) {
-    System.out.println("Hello, VitePress!");
+    System.out.println("Hello VitePress!");
   }
 }
 ```
@@ -723,7 +723,7 @@ public class Hello {
 ```xml
 <note>
   <to>User</to>
-  <message>Hello, world!</message>
+  <message>Hello world!</message>
 <note>
 ```
 

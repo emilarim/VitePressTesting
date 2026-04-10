@@ -22,7 +22,7 @@ export default defineConfig({
           items: [
             { text: 'Installation Considerations', link: '/installationVitePress' },
             { text: 'Testing Configurations', link: '/testingconfig' },
-            { text: 'Conclusions UX Evaluation', link: '/UXevaluation' },
+            { text: 'UX Evaluation Conclusions', link: '/UXevaluation' },
           ]
         }
       ],
